@@ -10,7 +10,8 @@ from Crypto.Cipher import ARC4
 
 
 def decrypt_string(a1, a2):
-    v1 = base64.b64decode(a2)
+    padding = '=' * (-len(a2) % 4)
+    v1 = base64.b64decode(a2 + padding)
     v3 = ARC4.new(SHA256.new(a1.encode('ascii')).digest()).decrypt(v1[:len(v1) - 0x20])
     if SHA256.new(v3).digest() == v1[-32:]:
         return v3.decode('ascii')
